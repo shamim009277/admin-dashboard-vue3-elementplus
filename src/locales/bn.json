@@ -1,0 +1,13 @@
+{
+    "welcome": "আপনার ড্যাশবোর্ডে স্বাগতম!",
+    "logout": "লগ আউট",
+    "profile": "প্রোফাইল",
+    
+    "dashboard": {
+      "number_of_sales": "বিক্রির সংখ্যা",
+      "total_products": "মোট পণ্য",
+      "sales_revinue": "বিক্রির রাজস্ব",
+      "total_users": "মোট ব্যবহারকারী",
+      "from_last_week": "গত সপ্তাহ থেকে"
+    }
+}

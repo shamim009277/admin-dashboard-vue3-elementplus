@@ -1,0 +1,14 @@
+{
+    "welcome": "Welcome to your dashboard!",
+    "logout": "Logout",
+    "number_of_sales": "Number of Sales",
+
+    "dashboard": {
+      "number_of_sales": "Number of Sales",
+      "total_products": "Total Products",
+      "sales_revinue": "Sales Revenue",
+      "total_users": "Total Users",
+      "from_last_week": "from last week"
+    }
+}
+
