@@ -233,7 +233,7 @@ a {
 
 /* Sidebar icon colors: default black, active uses primary color */
 .el-menu .el-icon {
-    color: #000;
+    color: #2b2b2b;
     transition: color 0.2s ease;
 }
 
@@ -247,12 +247,12 @@ a {
 
 /* active background for parent and child */
 .el-menu .el-menu-item.is-active {
-    background-color: rgba(98,106,239,0.08);
+    background-color: rgba(25, 36, 240, 0.08);
     color: #626AEF;
 }
 .el-menu .el-sub-menu.parent-active > .el-submenu__title,
 .el-menu .el-sub-menu.is-active > .el-submenu__title {
-    background-color: rgba(98,106,239,0.06);
+    background-color: rgba(25, 36, 239, 0.06);
     color: #626AEF;
 }
 </style>
