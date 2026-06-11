@@ -22,9 +22,11 @@
                 <span>Component</span>
             </template>
             <el-menu-item-group>
-                <router-link to="/buttons"><el-menu-item index="1"><el-icon>
+                <router-link to="/buttons">
+                    <el-menu-item index="1"><el-icon>
                             <Right />
-                        </el-icon>Buttons</el-menu-item></router-link>
+                        </el-icon>Buttons</el-menu-item>
+                </router-link>
                 <router-link to="/badges"><el-menu-item index="2"><el-icon>
                             <Right />
                         </el-icon>Badges</el-menu-item></router-link>
@@ -124,7 +126,6 @@
                 <span>Errors</span>
             </template>
             <el-menu-item-group>
-
                 <router-link to="/errors-500"><el-menu-item index="1"><el-icon>
                             <Right />
                         </el-icon>500 Error</el-menu-item></router-link>
@@ -141,6 +142,13 @@
         </el-sub-menu>
 
         <el-menu-item index="8">
+            <el-icon>
+                <Document />
+            </el-icon>
+            <template #title>Documentation</template>
+        </el-menu-item>
+
+        <el-menu-item index="9">
             <el-icon>
                 <DArrowLeft />
             </el-icon>

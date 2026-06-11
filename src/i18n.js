@@ -3,9 +3,9 @@ import { createI18n } from 'vue-i18n';
 // Create i18n instance
 const i18n = createI18n({
   legacy: false,
-  locale: localStorage.getItem('locale') || 'en', // Set default language
-  fallbackLocale: 'en', // Fallback to English
-  messages: {} // Start empty, load messages dynamically
+  locale: localStorage.getItem('locale') || 'en',
+  fallbackLocale: 'en',
+  messages: {}
 });
 
 export async function loadLocaleMessages(locale) {
