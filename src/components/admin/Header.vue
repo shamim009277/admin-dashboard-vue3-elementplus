@@ -37,10 +37,15 @@
                 </el-button>
                 <template #dropdown>
                     <!-- Notification List -->
-                    <el-dropdown-menu>
-                        <el-dropdown-item v-for="(item, index) in notifications" :key="index"
-                            @click.native="notify(item)">
-                            {{ item.message }}
+                    <el-dropdown-menu class="notification-menu">
+                        <el-dropdown-item v-for="(item, index) in notifications" :key="index" @click="notify(item)">
+                            <div class="notif-item">
+                                <div class="notif-top">
+                                    <span class="notif-user">{{ item.user }}</span>
+                                    <span class="notif-time">{{ formatTime(item.time) }}</span>
+                                </div>
+                                <div class="notif-msg">{{ truncate(item.message, 20) }}</div>
+                            </div>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -77,7 +82,7 @@
 
 <script setup>
 import { Menu, UserFilled, Avatar, Expand, User, Setting, CaretLeft, BellFilled } from "@element-plus/icons-vue";
-import { ref, watch,onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { loadLocaleMessages } from '@/i18n'
 import { ElNotification } from 'element-plus';
 
@@ -98,20 +103,34 @@ onMounted(async () => {
 });
 
 const notifications = ref([
-    { message: 'New message from John' },
-    { message: 'Your order has been shipped' },
-    { message: 'New comment on your post' }
+    { user: 'John', message: 'New message from John', time: new Date().toISOString() },
+    { user: 'Shop', message: 'Your order has been shipped and is on its way', time: new Date(Date.now() - 1000 * 60 * 60).toISOString() },
+    { user: 'Alice', message: 'New comment on your post: Nice work!', time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() }
 ]);
 
-const notificationCount = ref(notifications.value.length);
+const notificationCount = computed(() => notifications.value.length);
 
 const handleCommand = (command) => {
     // Handle command logic when dropdown item is clicked, if needed
 };
 
+const truncate = (str, n) => {
+    if (!str) return '';
+    return str.length > n ? str.slice(0, n) + '...' : str;
+};
+
+const formatTime = (iso) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const now = new Date();
+    const sameDay = d.toDateString() === now.toDateString();
+    if (sameDay) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleString();
+};
+
 const notify = (notification) => {
     ElNotification({
-        title: 'Notification',
+        title: notification.user || 'Notification',
         message: notification.message,
         type: 'info',
         duration: 3000
@@ -185,6 +204,45 @@ const notify = (notification) => {
 
 .el-badge__content {
     font-size: 10px !important;
+}
+
+.notification-menu {
+    min-width: 260px;
+}
+
+.notif-item {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 8px;
+    width: 100%;
+}
+
+.notif-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.notif-user {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.notif-msg {
+    font-size: 13px;
+    color: #666;
+}
+
+.notif-time {
+    font-size: 12px;
+    color: #999;
+    margin-left: auto;
+}
+
+.notification-menu .el-dropdown-item {
+    padding: 0;
 }
 
 /* Mobile Responsive */
