@@ -18,6 +18,7 @@ import Error500 from '@/views/errors/Error_500.vue'
 import Error404 from '@/views/errors/Error_404.vue'
 import Error503 from '@/views/errors/Error_503.vue'
 import BlankPage from '@/views/errors/Blank.vue'
+import Documentation from '@/views/Documentation.vue'
 
 
 const router = createRouter({
@@ -123,6 +124,11 @@ const router = createRouter({
       path: '/errors-coming-soon',
       name: 'errors-coming-soon',
       component: Error503,
+    },
+    {
+      path: '/documentation',
+      name: 'documentation',
+      component: Documentation,
     },
     {
       path: '/:pathMatch(.*)*',
