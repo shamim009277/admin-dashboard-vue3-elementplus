@@ -10,7 +10,7 @@
 
         <div class="flex top-menu">
             <el-dropdown class="button-gap">
-                <el-badge :value="12" class="badgh-btn">
+                <el-badge :value="alertCount" class="badgh-btn">
                     <el-button class="alert-btn" plain>
                         <el-icon class="el-icon--right" :style="{ fontSize: '20px' }">
                             <BellFilled />
@@ -19,10 +19,24 @@
                 </el-badge>
 
                 <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item>New message from John</el-dropdown-item>
-                        <el-dropdown-item>New message from John</el-dropdown-item>
-                        <el-dropdown-item>New message from John</el-dropdown-item>
+                    <el-dropdown-menu class="notification-menu">
+                        <el-dropdown-item v-for="(item, idx) in alerts" :key="idx" @click="notify(item)">
+                            <div class="alert-item" :class="{ 'is-read': item.read }">
+                                <div class="alert-avatar" :style="{ background: avatarColor(item.user), color: '#fff' }">{{ (item.user || '?').charAt(0).toUpperCase() }}</div>
+                                <div class="alert-content">
+                                    <div class="alert-top">
+                                        <span class="alert-user">{{ item.user }}</span>
+                                        <span class="alert-time">{{ formatTime(item.time) }}</span>
+                                    </div>
+                                    <div class="alert-msg">{{ truncate(item.message, 20) }}</div>
+                                </div>
+                            </div>
+                        </el-dropdown-item>
+
+                        <div class="alerts-footer">
+                            <a href="#" class="see-all" @click.prevent="openAll">See all notifications</a>
+                            <el-button type="text" class="read-all" @click.stop="markAllRead">Read all</el-button>
+                        </div>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -110,6 +124,14 @@ const notifications = ref([
 
 const notificationCount = computed(() => notifications.value.length);
 
+const alerts = ref([
+    { user: 'John', message: 'Server restarted successfully', time: new Date().toISOString(), read: false },
+    { user: 'System', message: 'Backup completed at 03:20 AM', time: new Date(Date.now() - 1000 * 60 * 60).toISOString(), read: false },
+    { user: 'Alice', message: 'New signup: alice@example.com', time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), read: false }
+]);
+
+const alertCount = computed(() => alerts.value.filter(a => !a.read).length);
+
 const handleCommand = (command) => {
     // Handle command logic when dropdown item is clicked, if needed
 };
@@ -129,12 +151,37 @@ const formatTime = (iso) => {
 };
 
 const notify = (notification) => {
+    // mark this alert as read when clicked
+    if (notification && notification.read === false) {
+        notification.read = true;
+    }
     ElNotification({
         title: notification.user || 'Notification',
         message: notification.message,
         type: 'info',
         duration: 3000
     });
+};
+
+const markAllRead = () => {
+    alerts.value.forEach(a => a.read = true);
+};
+
+const openAll = () => {
+    // emit an event so parent can navigate to notifications page if desired
+    // or implement navigation here
+    // Example: emit('openNotifications') — but script setup needs defineEmits if used
+    console.log('Open all notifications (implement navigation)');
+};
+
+// Avatar color palette and deterministic picker based on username
+const _avatarColors = ['#7b8cff', '#f56c6c', '#e6a23c', '#67c23a', '#409eff', '#9c27b0', '#ff9800', '#00bcd4'];
+const avatarColor = (user) => {
+    if (!user) return 'rgba(98,106,239,0.12)';
+    // simple hash by summing char codes
+    let h = 0;
+    for (let i = 0; i < user.length; i++) h += user.charCodeAt(i);
+    return _avatarColors[h % _avatarColors.length];
 };
 </script>
 
@@ -208,6 +255,74 @@ const notify = (notification) => {
 
 .notification-menu {
     min-width: 260px;
+}
+
+.alert-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 8px;
+}
+
+.alert-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(98,106,239,0.12);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.alert-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.alert-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert-user {
+    font-weight: 600;
+}
+
+.alert-msg {
+    color: #666;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.alert-time {
+    color: #999;
+    font-size: 12px;
+}
+
+.alert-item.is-read {
+    opacity: 0.45;
+}
+
+.alerts-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.alerts-footer .see-all {
+    color: #409eff;
+    text-decoration: none;
+}
+
+.alerts-footer .read-all {
+    color: #606266;
 }
 
 .notif-item {
