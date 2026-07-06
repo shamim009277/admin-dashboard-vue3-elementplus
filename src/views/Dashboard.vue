@@ -56,6 +56,21 @@
                     </div>
                 </el-card><br>
             </el-col>
+            
+            <!-- Added extra card in the same row (same style) -->
+            <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                <el-card class="dashboard-card1" shadow="hover" style="border-right: 4px solid #9c27b0;">
+                    <div class="card-header">
+                        <div class="card-info">
+                            <h3>Active Sessions</h3>
+                            <h1 style="color: #9c27b0 !important;">342</h1>
+                            <p> <span>+1.2% {{ $t('dashboard.from_last_week') }}</span></p>
+                        </div>
+
+                        <el-button type="primary" :icon="UserFilled" circle size="large" />
+                    </div>
+                </el-card><br>
+            </el-col>
         </el-row>
 
         <el-row :gutter="10">

@@ -44,14 +44,15 @@
   }
   
   .circle-image {
-    width: 300px;
-    height: 300px;
+    width: 220px;
+    height: 220px;
     margin-bottom: 20px;
     border: 1px solid #e59797;
     border-radius: 50%;
     padding: 2px;
+    object-fit: cover;
   }
-  
+
   .error-card {
     max-width: 600px;
     width: 100%;
@@ -66,9 +67,11 @@
   
   .error-logo img {
     width: 200px;
-    height: auto;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
   }
-  
+
   .card-content {
     text-align: center;
   }
