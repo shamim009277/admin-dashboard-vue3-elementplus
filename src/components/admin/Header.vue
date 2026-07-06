@@ -70,9 +70,9 @@
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
 
-            <el-dropdown>
-                <el-button class="user-btn" plain>
-                    <el-icon class="el-icon--right" :style="{ fontSize: '18px' }">
+            <el-dropdown class="user-dropdown">
+                <el-button class="user-btn" plain circle>
+                    <el-icon class="el-icon--right" :style="{ fontSize: '18px', margin: '0px' }">
                         <UserFilled />
                     </el-icon>
                 </el-button>
@@ -193,8 +193,14 @@ const avatarColor = (user) => {
     background-color: #626aef;
     color: white;
     margin-top: 0;
-    padding: 0 12px 10px;
+    padding: 10px 12px 10px;
     height: 56px;
+}
+
+.top-menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .menu-container {
@@ -228,7 +234,46 @@ const avatarColor = (user) => {
     padding: 0px;
 }
 
-.alert-btn:hover, .user-btn:hover {
+.user-dropdown {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.user-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 999px;
+    border: 2px solid #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background-color: transparent;
+    overflow: hidden;
+    margin: 0 !important;
+}
+
+.user-btn .el-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-btn:hover,
+.user-btn:focus,
+.user-btn:focus-visible {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+    color: white !important;
+    outline: none !important;
+}
+
+.alert-btn:hover {
     background-color: #626aef;
     opacity: 0.7;
     border: none;
