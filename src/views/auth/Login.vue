@@ -1,9 +1,10 @@
 <template>
   <div class="login-wrapper">
     <el-card class="login-card" shadow="hover">
-      <h2 class="text-center text-xl font-bold mb-2 flex items-center justify-center gap-2" style="text-align: center;margin-bottom: 5px;">
-        Admin Login
-      </h2>
+      <div class="login-header">
+        <h2>Welcome Back!</h2>
+        <p>Sign in to continue to A&amp;G.</p>
+      </div>
 
       <!-- Logo -->
       <div class="login-logo">
@@ -13,7 +14,8 @@
       <!-- Login Form -->
       <el-form ref="loginFormRef" :model="loginForm" :rules="rules" label-width="0" class="login-form">
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" placeholder="Username" autocomplete="off" :prefix-icon="User" size="large"></el-input>
+          <el-input v-model="loginForm.username" placeholder="Username" autocomplete="off" :prefix-icon="User"
+            size="large"></el-input>
         </el-form-item>
 
         <el-form-item prop="password">
@@ -35,13 +37,20 @@
           <span>Don't have an account yet ? </span><router-link to="/register">Sign Up</router-link>
         </div>
       </el-form>
+
+      <div class="login-footer">
+        <p>Copyright 2026 © <a href="#" target="_blank" rel="noopener noreferrer">A&G Fashion Ltd.</a></p>
+        <p>Unauthorized Access is Prohibited.</p>
+      </div>
     </el-card>
+
+
   </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { Search, User, Lock } from '@element-plus/icons-vue'
+import { User, Lock } from '@element-plus/icons-vue'
 
 const loginFormRef = ref(null)
 const showPassword = ref(false)
@@ -74,11 +83,13 @@ const submitLogin = (formEl) => {
 
 <style scoped>
 .login-wrapper {
-  min-height: 97vh;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: #f4f6f9;
+  padding: 24px 16px 16px;
 }
 
 .login-card {
@@ -86,6 +97,24 @@ const submitLogin = (formEl) => {
   width: 100%;
   padding: 30px;
   border-radius: 12px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-header h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.login-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .login-logo {
@@ -107,5 +136,23 @@ const submitLogin = (formEl) => {
 .login-links a {
   color: #409eff;
   text-decoration: none;
+}
+
+.login-footer {
+  margin-top: 25px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.login-footer a {
+  color: #409eff;
+  text-decoration: none;
+}
+
+.login-footer p {
+  padding: 0;
+  margin: 0;
 }
 </style>
