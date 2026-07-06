@@ -1,5 +1,5 @@
 <template>
-    <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" :collapse="isOpen" :unique-opened="true" @open="handleOpen" @close="handleClose" @select="onSelect">
+    <el-menu :key="route.fullPath" :default-active="activeIndex" :default-openeds="openedMenus" class="el-menu-vertical-demo" :collapse="!isOpen" :unique-opened="true" @open="handleOpen" @close="handleClose" @select="onSelect">
         <el-menu-item index="1">
             <RouterLink to="/">
                 <el-icon>
@@ -19,7 +19,7 @@
                     <el-icon>
                         <Compass />
                     </el-icon>
-                    <span v-if="!isOpen">Component</span>
+                    <span v-if="isOpen">Component</span>
                 </div>
             </template>
             <el-menu-item-group>
@@ -49,7 +49,7 @@
                     <el-icon>
                         <List />
                     </el-icon>
-                    <span v-if="!isOpen">Table</span>
+                    <span v-if="isOpen">Table</span>
                 </div>
             </template>
             <el-menu-item-group>
@@ -68,7 +68,7 @@
                     <el-icon>
                         <DocumentAdd />
                     </el-icon>
-                    <span v-if="!isOpen">Form</span>
+                    <span v-if="isOpen">Form</span>
                 </div>
             </template>
             <el-menu-item-group>
@@ -87,7 +87,7 @@
                     <el-icon>
                         <Unlock />
                     </el-icon>
-                    <span v-if="!isOpen">Authentication</span>
+                    <span v-if="isOpen">Authentication</span>
                 </div>
             </template>
             <el-menu-item-group>
@@ -113,7 +113,7 @@
                     <el-icon>
                         <setting />
                     </el-icon>
-                    <span v-if="!isOpen">setting</span>
+                    <span v-if="isOpen">setting</span>
                 </div>
             </template>
             <el-menu-item-group>
@@ -133,7 +133,7 @@
                     <el-icon>
                         <WarnTriangleFilled />
                     </el-icon>
-                    <span v-if="!isOpen">Errors</span>
+                    <span v-if="isOpen">Errors</span>
                 </div>
             </template>
             <el-menu-item-group>
@@ -173,8 +173,8 @@
 </template>
 
 <script lang="ts" setup>
-import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
 import { Document, Menu as IconMenu, Location, Setting, HomeFilled, Right, Compass, List, DocumentAdd, Unlock, DArrowLeft, WarnTriangleFilled } from '@element-plus/icons-vue'
 
 const isCollapse = ref(true)
@@ -182,27 +182,85 @@ defineProps(["isOpen"]);
 
 const activeIndex = ref('1')
 const activeParentIndex = ref('')
+const openedMenus = ref<string[]>([])
+const route = useRoute()
+
+const routeToMenuMap: Record<string, string> = {
+    '/': '1',
+    '/about': '1',
+    '/buttons': '2-1',
+    '/badges': '2-2',
+    '/alerts': '2-3',
+    '/modals': '2-4',
+    '/notifications': '2-5',
+    '/simple-tables': '3-1',
+    '/data-tables': '3-2',
+    '/form-element': '4-1',
+    '/form': '4-2',
+    '/login': '5-1',
+    '/register': '5-2',
+    '/forget-password': '5-3',
+    '/reset-password': '5-4',
+    '/errors-500': '7-1',
+    '/errors-404': '7-2',
+    '/errors-coming-soon': '7-3',
+    '/blank-page': '7-4',
+    '/documentation': '8',
+}
+
+function updateActiveState(path: string) {
+    const menuIndex = routeToMenuMap[path]
+
+    if (menuIndex) {
+        activeIndex.value = menuIndex
+        if (menuIndex.includes('-')) {
+            const parent = menuIndex.split('-')[0]
+            activeParentIndex.value = parent
+            openedMenus.value = [parent]
+        } else {
+            activeParentIndex.value = menuIndex
+            openedMenus.value = menuIndex === '1' || menuIndex === '8' || menuIndex === '9' ? [] : [menuIndex]
+        }
+        return
+    }
+
+    activeIndex.value = '1'
+    activeParentIndex.value = ''
+    openedMenus.value = []
+}
 
 function onSelect(index: string) {
     activeIndex.value = index
     if (index.includes('-')) {
-        activeParentIndex.value = index.split('-')[0]
+        const parent = index.split('-')[0]
+        activeParentIndex.value = parent
+        openedMenus.value = [parent]
     } else {
         activeParentIndex.value = index
+        openedMenus.value = index === '1' || index === '8' || index === '9' ? [] : [index]
     }
 }
 
 function selectParent(parent: string) {
     activeParentIndex.value = parent
     activeIndex.value = parent
+    openedMenus.value = [parent]
 }
+
+watch(
+    () => route.path,
+    (path) => updateActiveState(path),
+    { immediate: true }
+)
 
 const handleOpen = (key: string, keyPath: string[]) => {
     activeParentIndex.value = key
     activeIndex.value = key
+    openedMenus.value = [key]
 }
 const handleClose = (key: string, keyPath: string[]) => {
     if (activeParentIndex.value === key) activeParentIndex.value = ''
+    openedMenus.value = openedMenus.value.filter((menu) => menu !== key)
 }
 </script>
 
@@ -231,6 +289,21 @@ a {
     height: 44px;
 }
 
+.el-menu.el-menu--collapse .el-menu-item-group .el-menu-item {
+    padding: 8px 14px;
+    font-size: 13px;
+    height: 36px;
+    line-height: 36px;
+}
+
+.el-menu--popup .el-menu-item,
+.el-menu--popup .el-sub-menu__title {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+}
+
 /* Sidebar icon colors: default black, active uses primary color */
 .el-menu .el-icon {
     color: #2b2b2b;
@@ -247,12 +320,23 @@ a {
 
 /* active background for parent and child */
 .el-menu .el-menu-item.is-active {
-    background-color: rgba(25, 36, 240, 0.08);
+    background-color: rgba(98, 106, 239, 0.16);
     color: #626AEF;
 }
 .el-menu .el-sub-menu.parent-active > .el-submenu__title,
 .el-menu .el-sub-menu.is-active > .el-submenu__title {
-    background-color: rgba(25, 36, 239, 0.06);
+    background-color: rgba(98, 106, 239, 0.16);
     color: #626AEF;
+    border-radius: 6px;
+}
+.el-menu .el-sub-menu.parent-active > .el-submenu__title .el-icon,
+.el-menu .el-sub-menu.is-active > .el-submenu__title .el-icon {
+    background-color: rgba(98, 106, 239, 0.16);
+    color: #626AEF;
+    border-radius: 6px;
+    padding: 4px;
+}
+.el-menu .el-sub-menu.parent-active .el-menu-item.is-active {
+    background-color: rgba(98, 106, 239, 0.18);
 }
 </style>

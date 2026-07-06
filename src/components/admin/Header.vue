@@ -192,7 +192,8 @@ const avatarColor = (user) => {
     align-items: center;
     background-color: #626aef;
     color: white;
-    padding: 10px 12px;
+    margin-top: 0;
+    padding: 0 12px 10px;
     height: 56px;
 }
 
