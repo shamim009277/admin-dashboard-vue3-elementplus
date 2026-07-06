@@ -10,6 +10,7 @@ import SimpleTable from '@/views/table/SimpleTable.vue'
 import DataTable from '@/views/table/DataTable.vue'
 import CustomForm from '@/views/Form.vue'
 import FormElement from '@/views/FormElement.vue'
+import Tabs from '@/views/comp/Tabs.vue'
 import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
@@ -82,6 +83,11 @@ const router = createRouter({
           path: '/form-element',
           name: 'formElement',
           component: FormElement,
+        },
+        {
+          path: '/tabs',
+          name: 'tabs',
+          component: Tabs,
         },
         {
           path: '/blank-page',

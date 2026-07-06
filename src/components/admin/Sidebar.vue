@@ -40,6 +40,9 @@
                 <router-link to="/notifications" @click="onSelect('2-5')"><el-menu-item index="2-5"><el-icon>
                             <Right />
                         </el-icon>Notification</el-menu-item></router-link>
+                <router-link to="/tabs" @click="onSelect('4-3')"><el-menu-item index="4-3"><el-icon>
+                            <Right />
+                        </el-icon>Tabs</el-menu-item></router-link>
             </el-menu-item-group>
         </el-sub-menu>
 
@@ -197,6 +200,7 @@ const routeToMenuMap: Record<string, string> = {
     '/data-tables': '3-2',
     '/form-element': '4-1',
     '/form': '4-2',
+    '/tabs': '4-3',
     '/login': '5-1',
     '/register': '5-2',
     '/forget-password': '5-3',

@@ -28,6 +28,27 @@
                                         <el-option label="Zone two" value="beijing" />
                                     </el-select>
                                 </el-form-item>
+                                <el-form-item label="Tags">
+                                    <el-select
+                                        v-model="form.tags"
+                                        multiple
+                                        filterable
+                                        clearable
+                                        collapse-tags
+                                        allow-create
+                                        default-first-option
+                                        placeholder="Search and select tags"
+                                        @change="handleTagSelect"
+                                    >
+                                        <el-option label="Select all" value="all" />
+                                        <el-option
+                                            v-for="item in tagOptions"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                        />
+                                    </el-select>
+                                </el-form-item>
                                 <el-form-item label="Activity time">
                                     <el-col :span="11">
                                         <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date"
@@ -70,7 +91,7 @@
                                     <el-input v-model="form.desc" type="textarea" />
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click="onSubmit">Create</el-button>
+                                    <el-button type="primary" @click="onSubmit"><el-icon><Plus /></el-icon>Create</el-button>
                                     <el-button>Cancel</el-button>
                                 </el-form-item>
                             </el-form>
@@ -138,7 +159,7 @@
                                     <el-input v-model="form.desc" type="textarea" />
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click="onSubmit">Create</el-button>
+                                    <el-button type="primary" @click="onSubmit"><el-icon><Plus /></el-icon>Create</el-button>
                                     <el-button>Cancel</el-button>
                                 </el-form-item>
                             </el-form>
@@ -220,6 +241,7 @@
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="submitForm(ruleFormRef)">
+                                        <el-icon><Plus /></el-icon>
                                         Create
                                     </el-button>
                                     <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
@@ -236,11 +258,13 @@
 <script setup>
 import PageHeader from '@/components/admin/PageHeader.vue'
 import { reactive, ref } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 
 // do not use same name with ref
 const form = reactive({
     name: '',
     region: '',
+    tags: [],
     date1: '',
     date2: '',
     delivery: false,
@@ -248,6 +272,27 @@ const form = reactive({
     resource: '',
     desc: '',
 })
+
+const tagOptions = [
+    { value: 'design', label: 'Design' },
+    { value: 'development', label: 'Development' },
+    { value: 'marketing', label: 'Marketing' },
+    { value: 'sales', label: 'Sales' },
+    { value: 'support', label: 'Support' },
+]
+
+const handleTagSelect = (value) => {
+    const selected = Array.isArray(value) ? value : []
+    const allOptionValues = tagOptions.map((item) => item.value)
+
+    if (selected.includes('all')) {
+        form.tags = ['all', ...allOptionValues]
+        return
+    }
+
+    const hasAll = allOptionValues.every((optionValue) => selected.includes(optionValue))
+    form.tags = hasAll ? ['all', ...selected] : selected.filter((item) => item !== 'all')
+}
 
 const onSubmit = () => {
     console.log('submit!')
@@ -339,5 +384,12 @@ const options = Array.from({ length: 10000 }).map((_, idx) => ({
     align-items: center;
     justify-content: center;
     gap: 4px;
+}
+
+/* Add spacing between icon and text for action buttons in this form */
+.el-button > .el-icon {
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
 }
 </style>
