@@ -8,11 +8,21 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
-  ],
+    process.env.NODE_ENV === 'development' ? vueDevTools() : null,
+  ].filter(Boolean),
   base: '/',  // এখানে 'repository-name' আপনার GitHub রিপোজিটরির নাম হবে
   build: {
     outDir: 'dist',  // ভিউ প্রোজেক্টের বিল্ড ফোল্ডার
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'element-plus': ['element-plus'],
+          'apexcharts': ['apexcharts', 'vue3-apexcharts'],
+          'vendor': ['vue', 'vue-router', 'vue-i18n']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
   },
   resolve: {
     alias: {

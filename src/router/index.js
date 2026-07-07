@@ -1,145 +1,123 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Dashboard from '@/views/Dashboard.vue'
-import DefaultLayout from '@/views/Default.vue'
-import Button from '@/views/comp/Button.vue'
-import Badge from '@/views/comp/Badge.vue'
-import Alert from '@/views/comp/Alert.vue'
-import CustomModal from '@/views/comp/Modal.vue'
-import Notification from '@/views/comp/Notification.vue'
-import SimpleTable from '@/views/table/SimpleTable.vue'
-import DataTable from '@/views/table/DataTable.vue'
-import CustomForm from '@/views/Form.vue'
-import FormElement from '@/views/FormElement.vue'
-import Tabs from '@/views/comp/Tabs.vue'
-import Login from '@/views/auth/Login.vue'
-import Register from '@/views/auth/Register.vue'
-import ForgetPassword from '@/views/auth/ForgetPassword.vue'
-import ResetPassword from '@/views/auth/ResetPassword.vue'
-import Error500 from '@/views/errors/Error_500.vue'
-import Error404 from '@/views/errors/Error_404.vue'
-import Error503 from '@/views/errors/Error_503.vue'
-import BlankPage from '@/views/errors/Blank.vue'
-import Documentation from '@/views/Documentation.vue'
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      component: DefaultLayout,
+      component: () => import('@/views/Default.vue'),
       children: [
         {
           path: '',
           name: 'dashboard',
-          component: Dashboard,
+          component: () => import('@/views/Dashboard.vue'),
         },
         {
           path: '/about',
           name: 'about',
-          component: () => import('../views/AboutView.vue'),
+          component: () => import('@/views/AboutView.vue'),
         },
         {
           path: '/buttons',
           name: 'button',
-          component: Button,
+          component: () => import('@/views/comp/Button.vue'),
         },
         {
           path: '/badges',
           name: 'badge',
-          component: Badge,
+          component: () => import('@/views/comp/Badge.vue'),
         },
         {
           path: '/alerts',
           name: 'alert',
-          component: Alert,
+          component: () => import('@/views/comp/Alert.vue'),
         },
         {
           path: '/simple-tables',
           name: 'simpletable',
-          component: SimpleTable,
+          component: () => import('@/views/table/SimpleTable.vue'),
         },
         {
           path: '/data-tables',
           name: 'datatable',
-          component: DataTable,
+          component: () => import('@/views/table/DataTable.vue'),
         },
         {
           path: '/modals',
           name: 'modals',
-          component: CustomModal,
+          component: () => import('@/views/comp/Modal.vue'),
         },
         {
           path: '/notifications',
           name: 'notifications',
-          component: Notification,
+          component: () => import('@/views/comp/Notification.vue'),
         },
         {
           path: '/form',
           name: 'form',
-          component: CustomForm,
+          component: () => import('@/views/Form.vue'),
         },
         {
           path: '/form-element',
           name: 'formElement',
-          component: FormElement,
+          component: () => import('@/views/FormElement.vue'),
         },
         {
           path: '/tabs',
           name: 'tabs',
-          component: Tabs,
+          component: () => import('@/views/comp/Tabs.vue'),
         },
         {
           path: '/blank-page',
           name: 'blank-page',
-          component: BlankPage,
+          component: () => import('@/views/errors/Blank.vue'),
         },
       ],
     },
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: () => import('@/views/auth/Login.vue'),
     },
     {
       path: '/register',
       name: 'register',
-      component: Register,
+      component: () => import('@/views/auth/Register.vue'),
     },
     {
       path: '/forget-password',
       name: 'forget-password',
-      component: ForgetPassword,
+      component: () => import('@/views/auth/ForgetPassword.vue'),
     },
     {
       path: '/reset-password',
       name: 'reset-password',
-      component: ResetPassword,
+      component: () => import('@/views/auth/ResetPassword.vue'),
     },
     {
       path: '/errors-500',
       name: 'errors-500',
-      component: Error500,
+      component: () => import('@/views/errors/Error_500.vue'),
     },
     {
       path: '/errors-404',
       name: 'errors-404',
-      component: Error404,
+      component: () => import('@/views/errors/Error_404.vue'),
     },
     {
       path: '/errors-coming-soon',
       name: 'errors-coming-soon',
-      component: Error503,
+      component: () => import('@/views/errors/Error_503.vue'),
     },
     {
       path: '/documentation',
       name: 'documentation',
-      component: Documentation,
+      component: () => import('@/views/Documentation.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: Error404,
+      component: () => import('@/views/errors/Error_404.vue'),
     }
 
   ],

@@ -1,22 +1,26 @@
 <template>
     <div>
-        <!-- Global Search Input -->
-        <el-input v-model="searchQuery" placeholder="Search..." clearable style="width: 450px; margin-bottom: 10px" />
+        <!-- Global Search Input & Rows Per Page -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <el-input v-model="searchQuery" placeholder="Search..." clearable style="width: 450px;" />
+            <el-select v-model="rowsPerPage" placeholder="Rows per page" size="medium" style="width:120px;">
+                <el-option v-for="size in [5, 10, 20]" :key="size" :label="`${size} rows`" :value="size" />
+            </el-select>
+        </div>
 
         <!-- Data Table -->
         <el-table :data="paginatedData" border style="width: 100%" @sort-change="handleSort">
-            <el-table-column prop="id" label="ID" width="50" />
-            <el-table-column prop="order_id" label="OrderID" />
+            <el-table-column prop="id" label="ID" width="50" sortable />
+            <el-table-column prop="order_id" label="OrderID" sortable />
             <el-table-column prop="name" label="Customer Name" sortable />
             <el-table-column prop="phone" label="Phone" sortable />
-            <el-table-column prop="order_date" label="Order Date" />
-            <el-table-column prop="payment" label="Payment" />
-            <el-table-column prop="quantity" label="Quantity" />
-            <el-table-column prop="price" label="Price" />
-            <el-table-column prop="total_amount" label="Total Amount" />
-            <el-table-column prop="paid" label="Paid" />
-            <el-table-column prop="due" label="Due" />
-            <!-- <el-table-column prop="status" label="Status" /> -->
+            <el-table-column prop="order_date" label="Order Date" sortable />
+            <el-table-column prop="payment" label="Payment" sortable />
+            <el-table-column prop="quantity" label="Quantity" sortable />
+            <el-table-column prop="price" label="Price" sortable />
+            <el-table-column prop="total_amount" label="Total Amount" sortable />
+            <el-table-column prop="paid" label="Paid" sortable />
+            <el-table-column prop="due" label="Due" sortable />
             <el-table-column prop="status" label="Status" :filters="[
                 { text: 'Pending', value: '1' },
                 { text: 'Delivered', value: '2' },
@@ -26,15 +30,15 @@
                         scope.row.status === '1'?'Pending':'Delivered' }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="action" label="Action" />
+            <el-table-column prop="action" label="Action" sortable />
         </el-table>
 
         <!-- Pagination Controls -->
-        <div style="margin-top: 10px; display: flex; justify-content: space-between;">
-            <!-- Rows Per Page Dropdown -->
-            <el-select v-model="rowsPerPage" placeholder="Rows per page" size="medium" style="width:100px;">
-                <el-option v-for="size in [5, 10, 20]" :key="size" :label="`${size} rows`" :value="size" />
-            </el-select>
+        <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Total Records Info -->
+            <span style="color: #606266; font-size: 14px;">
+                Showing {{ (currentPage - 1) * rowsPerPage + 1 }} to {{ Math.min(currentPage * rowsPerPage, filteredData.length) }} of {{ filteredData.length }} records
+            </span>
 
             <!-- Pagination -->
             <el-pagination background layout="prev, pager, next" :current-page="currentPage"
@@ -46,7 +50,6 @@
 <script setup>
 import { ref, computed } from "vue";
 
-// Sample Data (AJAX থেকে ডাটা আনতে চাইলে `fetch` বা `axios` ব্যবহার করুন)
 const tableData = ref([
     { id: 1, order_id: "#TWT5015100369", location: "Dhaka, Bangladesh", order_date: "11-06-2025", payment: "Credit Card", quantity: "3", price: "2300.00", total_amount: "6900.00", paid: "2000.00", due: "300.00", status: "1", name: "Rahim", email: "rahim@example.com", phone: "1234567890" },
     { id: 2, order_id: "#TWT5015100370", location: "Dhaka, Bangladesh", order_date: "11-06-2025", payment: "Credit Card", quantity: "3", price: "2300.00", total_amount: "6900.00", paid: "2000.00", due: "300.00", status: "2", name: "Karim", email: "karim@example.com", phone: "9876543210" },
@@ -60,18 +63,12 @@ const tableData = ref([
     { id:10, order_id: "#TWT5015100377", location: "Dhaka, Bangladesh", order_date: "11-06-2025", payment: "Credit Card", quantity: "3", price: "2300.00", total_amount: "6900.00", paid: "2000.00", due: "300.00", status: "1", name: "Nadim", email: "nadim@example.com", phone: "3334445556" },
 ]);
 
-// Search Query
 const searchQuery = ref("");
-
-// Pagination States
 const currentPage = ref(1);
 const rowsPerPage = ref(5);
-
-// Sorting States
 const sortColumn = ref(null);
 const sortOrder = ref(null);
 
-// **Filtered Data (Search Feature)**
 const filteredData = computed(() => {
     return tableData.value.filter((row) =>
         row.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -80,7 +77,6 @@ const filteredData = computed(() => {
     );
 });
 
-// **Sorted & Paginated Data**
 const paginatedData = computed(() => {
     let sortedData = [...filteredData.value];
 
@@ -103,14 +99,16 @@ const paginatedData = computed(() => {
     return sortedData.slice(start, end);
 });
 
-// Handle Page Change
 const handlePageChange = (newPage) => {
     currentPage.value = newPage;
 };
 
-// Handle Sorting
 const handleSort = ({ prop, order }) => {
     sortColumn.value = prop;
     sortOrder.value = order;
+};
+
+const filterTag = (value, row) => {
+    return row.status === value;
 };
 </script>

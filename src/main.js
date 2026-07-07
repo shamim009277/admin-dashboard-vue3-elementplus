@@ -11,8 +11,8 @@ import VueApexCharts from 'vue3-apexcharts'
 const app = createApp(App)
 app.component('apexchart', VueApexCharts)
 app.use(router)
-app.use(ElementPlus)
 app.use(i18n)
+app.use(ElementPlus)
 
 // Load the initial language
 const initialLocale = localStorage.getItem('locale') || 'en'
