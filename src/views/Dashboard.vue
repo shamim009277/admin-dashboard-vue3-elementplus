@@ -329,7 +329,7 @@ const CircleChart = defineAsyncComponent(() => import('@/components/chart/Circle
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 10px;
     font-family: 'Noto Sans Bengali', sans-serif;
 }
 
