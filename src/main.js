@@ -3,7 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import i18n, { loadLocaleMessages } from './i18n'
+import i18n, { getStoredLocale, loadLocaleMessages } from './i18n'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import VueApexCharts from 'vue3-apexcharts'
@@ -15,9 +15,7 @@ app.use(i18n)
 app.use(ElementPlus)
 
 // Load the initial language
-const initialLocale = localStorage.getItem('locale') || 'en'
+const initialLocale = getStoredLocale()
 loadLocaleMessages(initialLocale).then(() => {
   app.mount('#app')
 });
-
-
